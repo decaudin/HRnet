@@ -1,8 +1,12 @@
+import HomeHeader from "../../components/features/HomeHeader";
+import CreateEmployeeForm from "../../components/features/CreateEmployeeForm";
+
 export default function Home() {
 
     return (
-        <div>
-            <h1>HRnet</h1>
-        </div>
+        <>
+            <HomeHeader />
+            <CreateEmployeeForm />
+        </>
     )
 }

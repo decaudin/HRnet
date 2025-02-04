@@ -1,8 +1,10 @@
+import Title from "../../components/ui/Title";
+
 export default function EmployeeList() {
 
     return (
         <div>
-            <h1>Current Employees</h1>
+            <Title heading="Current Employee" />
         </div>
     )
 }
