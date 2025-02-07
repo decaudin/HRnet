@@ -10,7 +10,7 @@ export default function HomeHeader() {
                 <img className="w-18 h-auto" src={logo} alt="logo" />
                 <Title heading="HRnet" />
             </div>
-            <Link className="border border-gray-400 !text-black mb-6 w-[196px] mx-auto my-4 px-4 py-2 bg-gray-200 rounded-xl shadow hover:bg-gray-300" to="/employee-list" >View Current Employees</Link>
+            <Link className="w-[196px] border border-gray-400 mb-6 mx-auto my-4 px-4 py-2 bg-gray-200 rounded-xl shadow hover:bg-gray-300" to="/employee-list" >View Current Employees</Link>
             <h2 className="font-bold text-2xl my-2 mb-6">Create Employee</h2>
         </div>
     )

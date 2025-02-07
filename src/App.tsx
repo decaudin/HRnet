@@ -5,13 +5,13 @@ import Error from './pages/Error';
 
 export default function App() {
 
-  return (
-    <Router>
-        <Routes>          
-          <Route path="/" element={<Home />} />
-          <Route path="/employee-list" element={<EmployeeList />} />
-          <Route path="*" element={<Error />} />
-        </Routes>
-      </Router>
-  )
+    return (
+        <Router>
+            <Routes>          
+                <Route path="/" element={<Home />} />
+                <Route path="/employee-list" element={<EmployeeList />} />
+                <Route path="*" element={<Error />} />
+            </Routes>
+        </Router>
+    )
 }

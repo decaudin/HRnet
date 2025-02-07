@@ -4,7 +4,7 @@ export default function EmployeeList() {
 
     return (
         <div>
-            <Title heading="Current Employee" />
+            <Title heading="Current Employee" className="text-center"/>
         </div>
     )
 }

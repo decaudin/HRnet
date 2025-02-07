@@ -1,9 +1,9 @@
 import { Dispatch, SetStateAction } from "react";
-import SelectInput from "../../ui/SelectInput";
 import { handleStringInputChange } from "../../../utils/functions/handleStringInputChange";
 import { departments } from "../../../data/departments";
+import CustomDropdown from "../../ui/Dropdown";
 
-interface EmployeeDepartmentSelectProps {
+interface EmployeeDepartmentDropdownProps {
     departmentInfo: string;
     setDepartmentInfo: Dispatch<SetStateAction<string>>;
 }
@@ -13,7 +13,7 @@ const departmentOptions = departments.map((department) => ({
     label: department.label,
 }));
 
-export default function EmployeeDepartmentSelect({ departmentInfo, setDepartmentInfo }: EmployeeDepartmentSelectProps) {
+export default function EmployeeDepartmentDropdown({ departmentInfo, setDepartmentInfo }: EmployeeDepartmentDropdownProps) {
 
-    return <SelectInput id="department" label="Department" name="department" options={departmentOptions} value={departmentInfo} onChange={handleStringInputChange(setDepartmentInfo)}/>
+    return <CustomDropdown label="Department" options={departmentOptions} selected={departmentInfo} onChange={handleStringInputChange(setDepartmentInfo)} />
 }
