@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import Title from "../../ui/Title";
 import logo from "../../../assets/logo.png";
+import Title from "../../ui/Title";
 
 export default function HomeHeader() {
 

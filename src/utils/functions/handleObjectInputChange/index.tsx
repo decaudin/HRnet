@@ -10,4 +10,3 @@ export const handleObjectInputChange = <T extends object>(setter: Dispatch<SetSt
       setter((prevData) => ({ ...prevData, [name]: value }));
    }
 };
- 

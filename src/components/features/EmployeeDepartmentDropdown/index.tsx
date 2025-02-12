@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction } from "react";
+import { CustomDropdown } from "xd-react-custom-dropdown";
 import { handleStringInputChange } from "../../../utils/functions/handleStringInputChange";
 import { departments } from "../../../data/departments";
-import CustomDropdown from "../../ui/Dropdown";
 
 interface EmployeeDepartmentDropdownProps {
     departmentInfo: string;
