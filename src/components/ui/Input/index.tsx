@@ -10,7 +10,7 @@ export default function Input({ id, label, type, name, value, onChange, wrapperC
             <label htmlFor={id}>
                 {label}
             </label>
-            <input className="pl-2 pr-1 mt-2 w-[180px] bg-white shadow" type={type} id={id} name={name} value={value} onChange={onChange} {...props} />
+            <input type={type} id={id} name={name} value={value} onChange={onChange} className="pl-2 pr-1 mt-2 w-[180px] bg-white shadow" {...props} />
         </div>
     );
 }
