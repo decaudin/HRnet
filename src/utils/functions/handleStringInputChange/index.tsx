@@ -2,10 +2,12 @@ import { Dispatch, SetStateAction, ChangeEvent } from "react";
 
 type InputChangeEvent = ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>;
 
-export const handleStringInputChange = (setter: Dispatch<SetStateAction<string>>) => (e: InputChangeEvent | string) => {
+export const handleStringInputChange = (setter: Dispatch<SetStateAction<string>>, setErrors?: Dispatch<SetStateAction<{ [key: string]: boolean }>>) => (e: InputChangeEvent | string) => {
     if (typeof e === "string") {
         setter(e);
     } else {
-        setter(e.target.value);
+        const { name, value } = e.target;
+        setter(value);
+        if (setErrors) setErrors((prevErrors) => ({ ...prevErrors, [name]: false }));
     }
 };

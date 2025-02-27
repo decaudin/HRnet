@@ -1,16 +1,19 @@
+import { Dispatch, SetStateAction } from "react";
 import { formatDate } from "../../../utils/functions/formatDate";
 
 interface RenderCalendarDaysProps {
     viewDate: Date;
     selectedDate: Date | null;
+    errorKey: string;
+    setSelectedDate: Dispatch<SetStateAction<Date | null>>;
+    setInputValue: Dispatch<SetStateAction<string>>;
+    setIsOpen: Dispatch<SetStateAction<boolean>>;
+    setErrorMessage: Dispatch<SetStateAction<string | null>>;
+    setErrors: Dispatch<SetStateAction<{ [key: string]: boolean }>>;
     onChange: (date: Date) => void;
-    setSelectedDate: React.Dispatch<React.SetStateAction<Date | null>>;
-    setInputValue: React.Dispatch<React.SetStateAction<string>>;
-    setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    setErrorMessage: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
-export default function RenderCalendarDays({ viewDate, selectedDate, onChange, setSelectedDate, setInputValue, setIsOpen, setErrorMessage }: RenderCalendarDaysProps) {
+export default function RenderCalendarDays({ viewDate, selectedDate, errorKey, setSelectedDate, setInputValue, setIsOpen, setErrorMessage, setErrors, onChange }: RenderCalendarDaysProps) {
 
     const startOfMonth = (date: Date) => new Date(date.getFullYear(), date.getMonth(), 1);
     
@@ -42,7 +45,8 @@ export default function RenderCalendarDays({ viewDate, selectedDate, onChange, s
         setSelectedDate(date);
         setInputValue(formatDate(date));
         setIsOpen(false);
-        setErrorMessage(null)
+        setErrorMessage(null);
+        setErrors((prevErrors) => ({...prevErrors, [errorKey]: false }));
         onChange(date);
     };
 

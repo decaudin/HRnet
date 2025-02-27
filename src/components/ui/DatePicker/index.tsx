@@ -1,19 +1,20 @@
-import { useState, useEffect, useRef/*, useCallback*/ } from 'react';
-import { MouseEvent } from 'react';
+import { Dispatch, SetStateAction, useState, useEffect, useRef, MouseEvent } from "react";
 import { formatDate } from '../../../utils/functions/formatDate';
 import Input from '../Input';
 import RenderCalendarDays from '../RenderCalendarDays';
 import { handleStringInputChange } from '../../../utils/functions/handleStringInputChange';
 
 interface DatePickerProps {
-    onChange: (date: Date | null) => void;
     inputId: string;
     inputLabel: string;
     inputName: string;
     isError: boolean;
+    errorKey: string;
+    setErrors: Dispatch<SetStateAction<{ [key: string]: boolean }>>;
+    onChange: (date: Date | null) => void;
 }
 
-export default function DatePicker({ onChange, inputId, inputLabel, inputName, isError }: DatePickerProps) {
+export default function DatePicker({ inputId, inputLabel, inputName, isError, errorKey, setErrors, onChange }: DatePickerProps) {
 
     const [selectedDate, setSelectedDate] = useState<Date | null>(null)
     const [viewDate, setViewDate] = useState(new Date());
@@ -130,7 +131,7 @@ export default function DatePicker({ onChange, inputId, inputLabel, inputName, i
 
     return (
         <div className="relative w-full flex flex-col items-center">
-            <Input id={inputId} label={inputLabel} type="text" name={inputName} value={inputValue} onChange={handleStringInputChange(setInputValue)} onBlur={handleBlur} onFocus={() => setIsOpen(true)} isError={isError} />
+            <Input id={inputId} label={inputLabel} type="text" name={inputName} value={inputValue} onChange={handleStringInputChange(setInputValue, setErrors)} onBlur={handleBlur} onFocus={() => setIsOpen(true)} isError={isError} />
             {isOpen && (
                 <div ref={calendarRef} className="absolute z-50 bg-white shadow-lg rounded-lg p-4 mt-20 w-72" onBlur={handleCalendarBlur}>
                     <div className="flex items-center justify-between mb-4">
@@ -158,7 +159,7 @@ export default function DatePicker({ onChange, inputId, inputLabel, inputName, i
                         {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day, index) => (
                           <div key={index} className="font-bold">{day}</div>
                         ))}
-                        <RenderCalendarDays viewDate={viewDate} selectedDate={selectedDate} setSelectedDate={setSelectedDate} setInputValue={setInputValue} setIsOpen={setIsOpen} setErrorMessage={setErrorMessage} onChange={onChange} />
+                        <RenderCalendarDays viewDate={viewDate} selectedDate={selectedDate} errorKey={errorKey} setSelectedDate={setSelectedDate} setInputValue={setInputValue} setIsOpen={setIsOpen} setErrorMessage={setErrorMessage} setErrors={setErrors} onChange={onChange} />
                     </div>
                 </div>
             )}

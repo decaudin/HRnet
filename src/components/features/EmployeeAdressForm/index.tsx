@@ -21,9 +21,10 @@ interface EmployeeAdressFormProps {
         zipCode: string;
     }>>;
     errors: { [key:string]: boolean };
+    setErrors: Dispatch<SetStateAction<{ [key: string]: boolean }>>;
 }
 
-export default function EmployeeAdressForm({ states, formData, setFormData, errors }: EmployeeAdressFormProps) {
+export default function EmployeeAdressForm({ states, formData, setFormData, errors, setErrors }: EmployeeAdressFormProps) {
 
     const stateOptions = states.map((state) => ({
         value: state.abbreviation,
@@ -33,10 +34,10 @@ export default function EmployeeAdressForm({ states, formData, setFormData, erro
     return (
         <div className="relative border px-4 py-4 mt-8 mb-6">
             <p className="absolute left-4 top-[-14px] px-1 bg-sky-100">Address</p>
-            <Input id="street" label="Street" type="text" name="street" value={formData.street} onChange={handleObjectInputChange(setFormData)} isError={errors.street} />
-            <Input id="city" label="City" type="text" name="city" value={formData.city} onChange={handleObjectInputChange(setFormData)} isError={errors.city} />
+            <Input id="street" label="Street" type="text" name="street" value={formData.street} onChange={handleObjectInputChange(setFormData, setErrors)} isError={errors.street} />
+            <Input id="city" label="City" type="text" name="city" value={formData.city} onChange={handleObjectInputChange(setFormData, setErrors)} isError={errors.city} />
             <CustomDropdown label="State" options={stateOptions} selected={formData.state} onChange={handleObjectInputChange(setFormData)} wrapperClassName="z-1" />
-            <Input id="zipCode" label="Zip Code" type="number" name="zipCode" value={formData.zipCode} onChange={handleObjectInputChange(setFormData)} isError={errors.zipCode}/>
+            <Input id="zipCode" label="Zip Code" type="number" name="zipCode" value={formData.zipCode} onChange={handleObjectInputChange(setFormData, setErrors)} isError={errors.zipCode}/>
         </div>
     )
 }

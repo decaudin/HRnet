@@ -18,16 +18,17 @@ interface EmployeeBasicFormProps {
         startDate: string;
     }>>;
     errors: { [key:string]: boolean };
+    setErrors: Dispatch<SetStateAction<{ [key: string]: boolean }>>;
 }
 
-export default function EmployeeBasicForm({formData, setFormData, errors }: EmployeeBasicFormProps) {
+export default function EmployeeBasicForm({formData, setFormData, errors, setErrors }: EmployeeBasicFormProps) {
 
     return (
         <>
-            <Input id="firstName" label="First Name" type="text" name="firstName" value={formData.firstName} onChange={handleObjectInputChange(setFormData)} isError={errors.firstName} />
-            <Input id="lastName" label="Last Name" type="text" name="lastName" value={formData.lastName} onChange={handleObjectInputChange(setFormData)} isError={errors.lastName} />
-            <DatePicker onChange={(date) => setFormData({ ...formData, birthDate: formatDate(date) })} inputId="birthDate" inputLabel="Date of Birth" inputName="birthDate" isError={errors.birthDate} />
-            <DatePicker onChange={(date) => setFormData({ ...formData, startDate: formatDate(date) })} inputId="startDate" inputLabel="Start Date" inputName="startDate" isError={errors.startDate} /> 
+            <Input id="firstName" label="First Name" type="text" name="firstName" value={formData.firstName} onChange={handleObjectInputChange(setFormData, setErrors)} isError={errors.firstName} />
+            <Input id="lastName" label="Last Name" type="text" name="lastName" value={formData.lastName} onChange={handleObjectInputChange(setFormData, setErrors)} isError={errors.lastName} />
+            <DatePicker onChange={(date) => setFormData({ ...formData, birthDate: formatDate(date) })} inputId="birthDate" inputLabel="Date of Birth" inputName="birthDate" errorKey="birthDate" isError={errors.birthDate} setErrors={setErrors} />
+            <DatePicker onChange={(date) => setFormData({ ...formData, startDate: formatDate(date) })} inputId="startDate" inputLabel="Start Date" inputName="startDate" errorKey="startDate" isError={errors.startDate} setErrors={setErrors} /> 
         </>
     )
 }

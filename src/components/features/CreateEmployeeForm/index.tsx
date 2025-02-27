@@ -51,8 +51,8 @@ export default function CreateEmployeeForm() {
     
     return (
         <form onSubmit={handleSubmit} className="flex flex-col items-center mx-auto pt-4 pb-8 bg-sky-100 shadow-[0px_-2px_4px_0px_rgba(0,0,0,0.15),0px_2px_4px_0px_rgba(0,0,0,0.15)] sm:shadow-lg sm:rounded-lg sm:w-3/5 lg:w-2/5">
-            <EmployeeBasicForm formData={basicInfo} setFormData={setBasicInfo} errors={errors} />
-            <EmployeeAdressForm states={states} formData={addressInfo} setFormData={setAddressInfo} errors={errors} />
+            <EmployeeBasicForm formData={basicInfo} setFormData={setBasicInfo} errors={errors} setErrors={setErrors} />
+            <EmployeeAdressForm states={states} formData={addressInfo} setFormData={setAddressInfo} errors={errors} setErrors={setErrors} />
             <EmployeeDepartmentDropdown departments={departments} departmentInfo={departmentInfo} setDepartmentInfo={setDepartmentInfo} />
             <SubmitInput value="Save"/>
             <Modal isOpen={isModalOpen} onClose={closeModal}>
