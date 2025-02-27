@@ -8,7 +8,6 @@ interface ModalProps {
 
 export default function Modal({ isOpen, onClose, children }: ModalProps) {
 
-    const modalRef = useRef<HTMLDivElement>(null);
     const closeButtonRef = useRef<HTMLButtonElement>(null);
 
     useEffect(() => {
@@ -28,7 +27,7 @@ export default function Modal({ isOpen, onClose, children }: ModalProps) {
 
     return (
         <div aria-modal="true" role="dialog" onClick={onClose} className="fixed inset-0 flex items-center justify-center bg-black/60 z-50 text-lg">
-            <div role="document" ref={modalRef} onClick={(e) => e.stopPropagation()} className="bg-white p-6 rounded-lg shadow-lg relative w-full max-w-md min-h-[200px] flex items-center justify-center text-center">
+            <div role="document" onClick={(e) => e.stopPropagation()} className="bg-white p-6 rounded-lg shadow-lg relative w-9/10 max-w-md min-h-[200px] flex items-center justify-center text-center sm:w-full">
                 <button aria-label="Close modal" ref={closeButtonRef} onClick={onClose} className="absolute top-1 right-3 text-2xl text-gray-700 hover:text-black cursor-pointer">
                     &times;
                 </button>

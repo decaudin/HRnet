@@ -1,22 +1,22 @@
 export const departments = [
     { 
-        value: "sales", 
+        value: "Sales", 
         label: "Sales" 
     },
     { 
-        value: "marketing", 
+        value: "Marketing", 
         label: "Marketing" 
     },
     { 
-        value: "engineering", 
+        value: "Engineering", 
         label: "Engineering" 
     },
     { 
-        value: "human-resources", 
+        value: "Human Resources", 
         label: "Human Resources" 
     },
     { 
-        value: "legal", 
+        value: "Legal", 
         label: "Legal" 
     }
 ];
