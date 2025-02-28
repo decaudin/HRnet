@@ -18,5 +18,5 @@ export default function EmployeeDepartmentDropdown({ departments, departmentInfo
         label: department.label,
     }));
 
-    return <CustomDropdown label="Department" options={departmentOptions} selected={departmentInfo} onChange={handleStringInputChange(setDepartmentInfo)} />
+    return <CustomDropdown label="Department" options={departmentOptions} selected={departmentInfo} onChange={handleStringInputChange(setDepartmentInfo)} buttonClassName="focus:outline-none focus:ring-2 focus:ring-blue-700" />
 }

@@ -10,11 +10,12 @@ interface DatePickerProps {
     inputName: string;
     isError: boolean;
     errorKey: string;
+    isSubmittedSuccessfully: boolean;
     setErrors: Dispatch<SetStateAction<{ [key: string]: boolean }>>;
     onChange: (date: Date | null) => void;
 }
 
-export default function DatePicker({ inputId, inputLabel, inputName, isError, errorKey, setErrors, onChange }: DatePickerProps) {
+export default function DatePicker({ inputId, inputLabel, inputName, isError, errorKey, isSubmittedSuccessfully, setErrors, onChange }: DatePickerProps) {
 
     const [selectedDate, setSelectedDate] = useState<Date | null>(null)
     const [viewDate, setViewDate] = useState(new Date());
@@ -128,6 +129,13 @@ export default function DatePicker({ inputId, inputLabel, inputName, isError, er
             setIsOpen(false);
         }
     };
+
+    useEffect(() => {
+        if (isSubmittedSuccessfully) {
+            setInputValue("");
+            setSelectedDate(null);
+        }
+    }, [isSubmittedSuccessfully]);
 
     return (
         <div className="relative w-full flex flex-col items-center">
