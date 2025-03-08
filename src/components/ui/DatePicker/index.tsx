@@ -1,8 +1,9 @@
 import { Dispatch, SetStateAction, useState, useEffect, useRef, MouseEvent } from "react";
 import { formatDate } from '../../../utils/functions/formatDate';
+import { handleStringInputChange } from '../../../utils/functions/handleStringInputChange';
 import Input from '../Input';
 import RenderCalendarDays from '../RenderCalendarDays';
-import { handleStringInputChange } from '../../../utils/functions/handleStringInputChange';
+import Select from "../Select";
 
 interface DatePickerProps {
     inputId: string;
@@ -76,6 +77,22 @@ export default function DatePicker({ inputId, inputLabel, inputName, isError, er
         setViewDate(newViewDate);
     };
 
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+      
+        if (value.length === 4 && /^\d{4}$/.test(value)) {
+          const parsedYear = new Date(`${value}-01-01`);
+          setViewDate(parsedYear);
+        }
+      
+        if (value.length === 7 && /^\d{4}-(0[1-9]|1[0-2])$/.test(value)) {
+          const parsedDate = new Date(value);
+          setViewDate(parsedDate);
+        }
+
+        handleStringInputChange(setInputValue, setErrors)(e);
+    };
+
     const isValidDate = (year: number, month: number, day: number) => {
         const testDate = new Date(year, month - 1, day);
         return (
@@ -139,7 +156,7 @@ export default function DatePicker({ inputId, inputLabel, inputName, isError, er
 
     return (
         <div className="relative w-full flex flex-col items-center">
-            <Input id={inputId} label={inputLabel} type="text" name={inputName} value={inputValue} onChange={handleStringInputChange(setInputValue, setErrors)} onBlur={handleBlur} onFocus={() => setIsOpen(true)} isError={isError} />
+            <Input id={inputId} label={inputLabel} type="text" name={inputName} value={inputValue} onChange={handleInputChange} onBlur={handleBlur} onFocus={() => setIsOpen(true)} isError={isError} placeholder="YYYY-MM-DD" />
             {isOpen && (
                 <div ref={calendarRef} className="absolute z-50 bg-white shadow-lg rounded-lg p-4 mt-20 w-72" onBlur={handleCalendarBlur}>
                     <div className="flex items-center justify-between mb-4">
@@ -147,17 +164,8 @@ export default function DatePicker({ inputId, inputLabel, inputName, isError, er
 
                         <div className="flex items-center space-x-2">
                             <button onClick={handleTodayClick} className="text-gray-600 cursor-pointer hover:text-gray-900">🏠</button>
-
-                            <select value={months[viewDate.getMonth()]} onChange={(e) => selectHandleMonthChange(e.target.value)} className="h-[34px] text-gray-700 border border-gray-300 p-1 rounded-md cursor-pointer">
-                                {months.map((month) => <option key={month} value={month}>{month}</option>)}
-                            </select>
-
-                            <input
-                              type="number"
-                              value={viewDate.getFullYear()}
-                              onChange={(e) => handleYearChange(parseInt(e.target.value, 10))}
-                              className="w-20 text-gray-700 border border-gray-300 p-1 pl-2 rounded-md cursor-pointer"
-                            />
+                            <Select value={months[viewDate.getMonth()]} options={months} onChange={(e) => selectHandleMonthChange(e.target.value)} className="h-[34px] text-gray-700 border-gray-300 p-1 rounded-md" />
+                            <input type="number" value={viewDate.getFullYear()} onChange={(e) => handleYearChange(parseInt(e.target.value, 10))} className="w-20 text-gray-700 border border-gray-300 p-1 pl-2 rounded-md cursor-pointer" />
                         </div>
 
                         <button onClick={(e) => handleMonthChange(e, 'next')} className="text-gray-400 cursor-pointer hover:text-gray-900">▶</button>

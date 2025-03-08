@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-type EmployeeData = {
+export interface EmployeeData {
     firstName: string;
     lastName: string;
     birthDate: string;
