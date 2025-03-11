@@ -9,11 +9,11 @@ interface RenderCalendarDaysProps {
     setInputValue: Dispatch<SetStateAction<string>>;
     setIsOpen: Dispatch<SetStateAction<boolean>>;
     setErrorMessage: Dispatch<SetStateAction<string | null>>;
-    setErrors: Dispatch<SetStateAction<{ [key: string]: boolean }>>;
+    setEmptyErrors: Dispatch<SetStateAction<{ [key: string]: boolean }>>;
     onChange: (date: Date) => void;
 }
 
-export default function RenderCalendarDays({ viewDate, selectedDate, errorKey, setSelectedDate, setInputValue, setIsOpen, setErrorMessage, setErrors, onChange }: RenderCalendarDaysProps) {
+export default function RenderCalendarDays({ viewDate, selectedDate, errorKey, setSelectedDate, setInputValue, setIsOpen, setErrorMessage, setEmptyErrors, onChange }: RenderCalendarDaysProps) {
 
     const startOfMonth = (date: Date) => new Date(date.getFullYear(), date.getMonth(), 1);
     
@@ -46,7 +46,7 @@ export default function RenderCalendarDays({ viewDate, selectedDate, errorKey, s
         setInputValue(formatDate(date));
         setIsOpen(false);
         setErrorMessage(null);
-        setErrors((prevErrors) => ({...prevErrors, [errorKey]: false }));
+        setEmptyErrors((prevErrors) => ({...prevErrors, [errorKey]: false }));
         onChange(date);
     };
 

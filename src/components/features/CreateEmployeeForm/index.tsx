@@ -14,7 +14,8 @@ export default function CreateEmployeeForm() {
     const [addressInfo, setAddressInfo] = useState({ street: '', city: '', state: states[0]?.abbreviation || '', zipCode: '' });
     const [departmentInfo, setDepartmentInfo] = useState(departments[0]?.value || '');
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [errors, setErrors] = useState<{ [key: string]: boolean }>({});
+    const [textErrors, setTextErrors] = useState<{ [key: string]: boolean }>({});
+    const [emptyErrors, setEmptyErrors] = useState<{ [key: string]: boolean }>({});
     const [isSubmittedSuccessfully, setIsSubmittedSuccessfully] = useState(false);
 
     const addEmployee = useEmployeeStore((state) => state.addEmployee);
@@ -26,25 +27,25 @@ export default function CreateEmployeeForm() {
     const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
         e.preventDefault();
     
-        const newErrors: { [key: string]: boolean } = {};
-        let hasError = false;
+        const newEmptyErrors: { [key: string]: boolean } = {};
+        let hasEmptyError = false;
     
         (Object.keys(basicInfo) as Array<keyof typeof basicInfo>).forEach((key) => {
             if (!basicInfo[key].trim()) {
-                newErrors[key] = true;
-                hasError = true;
+                newEmptyErrors[key] = true;
+                hasEmptyError = true;
             }
         });
     
         (Object.keys(addressInfo) as Array<keyof typeof addressInfo>).forEach((key) => {
             if (!addressInfo[key].trim()) {
-                newErrors[key] = true;
-                hasError = true;
+                newEmptyErrors[key] = true;
+                hasEmptyError = true;
             }
         });
     
-        if (hasError) {
-            setErrors(newErrors);
+        if (hasEmptyError) {
+            setEmptyErrors(newEmptyErrors);
             return;
         }
     
@@ -63,8 +64,8 @@ export default function CreateEmployeeForm() {
 
     return (
         <form onSubmit={handleSubmit} className="flex flex-col items-center mx-auto pt-4 pb-8 bg-sky-100 shadow-[0px_-2px_4px_0px_rgba(0,0,0,0.15),0px_2px_4px_0px_rgba(0,0,0,0.15)] sm:shadow-lg sm:rounded-lg sm:w-3/5 lg:w-2/5">
-            <EmployeeBasicForm formData={basicInfo} setFormData={setBasicInfo} errors={errors} setErrors={setErrors} isSubmittedSuccessfully={isSubmittedSuccessfully} />
-            <EmployeeAdressForm states={states} formData={addressInfo} setFormData={setAddressInfo} errors={errors} setErrors={setErrors} />
+            <EmployeeBasicForm formData={basicInfo} setFormData={setBasicInfo} emptyErrors={emptyErrors} setEmptyErrors={setEmptyErrors} textErrors={textErrors} setTextErrors={setTextErrors} isSubmittedSuccessfully={isSubmittedSuccessfully} />
+            <EmployeeAdressForm states={states} formData={addressInfo} setFormData={setAddressInfo} emptyErrors={emptyErrors} setEmptyErrors={setEmptyErrors} textErrors={textErrors} setTextErrors={setTextErrors} />
             <EmployeeDepartmentDropdown departments={departments} departmentInfo={departmentInfo} setDepartmentInfo={setDepartmentInfo} />
             <SubmitInput value="Save" />
             <Modal isOpen={isModalOpen} onClose={closeModal}>

@@ -1,7 +1,8 @@
 import { Dispatch, SetStateAction } from "react";
 import { CustomDropdown } from "xd-react-custom-dropdown";
 import { handleObjectInputChange } from "../../../utils/functions/handleObjectInputChange";
-import Input from "../../ui/Input"
+import { handleBlur, validateNoDigitsOrSpecialChars, validateNoSpecialChars } from "../../../utils/functions/handleBlur";
+import Input from "../../ui/Input";
 
 interface EmployeeAdressFormProps {
     states: Array<{
@@ -20,11 +21,13 @@ interface EmployeeAdressFormProps {
         state: string;
         zipCode: string;
     }>>;
-    errors: { [key:string]: boolean };
-    setErrors: Dispatch<SetStateAction<{ [key: string]: boolean }>>;
+    emptyErrors: { [key:string]: boolean };
+    setEmptyErrors: Dispatch<SetStateAction<{ [key: string]: boolean }>>;
+    textErrors: { [key:string]: boolean};
+    setTextErrors: Dispatch<SetStateAction<{ [key: string]: boolean }>>;
 }
 
-export default function EmployeeAdressForm({ states, formData, setFormData, errors, setErrors }: EmployeeAdressFormProps) {
+export default function EmployeeAdressForm({ states, formData, setFormData, emptyErrors, setEmptyErrors, textErrors, setTextErrors }: EmployeeAdressFormProps) {
 
     const stateOptions = states.map((state) => ({
         value: state.abbreviation,
@@ -34,10 +37,10 @@ export default function EmployeeAdressForm({ states, formData, setFormData, erro
     return (
         <div className="relative border px-4 py-4 mt-8 mb-6">
             <p className="absolute left-4 top-[-14px] px-1 bg-sky-100">Address</p>
-            <Input id="street" label="Street" type="text" name="street" value={formData.street} onChange={handleObjectInputChange(setFormData, setErrors)} isError={errors.street} />
-            <Input id="city" label="City" type="text" name="city" value={formData.city} onChange={handleObjectInputChange(setFormData, setErrors)} isError={errors.city} />
+            <Input id="street" label="Street" type="text" name="street" value={formData.street} onChange={handleObjectInputChange(setFormData, setEmptyErrors)} onBlur={(e) =>handleBlur({ e, setTextErrors, setFormData, validate: validateNoSpecialChars})} isEmptyError={emptyErrors.street} isTextError={textErrors.street} />
+            <Input id="city" label="City" type="text" name="city" value={formData.city} onChange={handleObjectInputChange(setFormData, setEmptyErrors)} onBlur={(e) => handleBlur({ e, setTextErrors, setFormData, validate: validateNoDigitsOrSpecialChars })} isEmptyError={emptyErrors.city} isTextError={textErrors.city} />
             <CustomDropdown label="State" options={stateOptions} selected={formData.state} onChange={handleObjectInputChange(setFormData)} wrapperClassName="z-1" buttonClassName="focus:outline-none focus:ring-2 focus:ring-blue-700" />
-            <Input id="zipCode" label="Zip Code" type="number" name="zipCode" value={formData.zipCode} onChange={handleObjectInputChange(setFormData, setErrors)} isError={errors.zipCode}/>
+            <Input id="zipCode" label="Zip Code" type="number" name="zipCode" value={formData.zipCode} onChange={handleObjectInputChange(setFormData, setEmptyErrors)} isEmptyError={emptyErrors.zipCode}/>
         </div>
     )
 }

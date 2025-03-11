@@ -9,21 +9,21 @@ interface DatePickerProps {
     inputId: string;
     inputLabel: string;
     inputName: string;
-    isError: boolean;
+    isEmptyError: boolean;
     errorKey: string;
     isSubmittedSuccessfully: boolean;
-    setErrors: Dispatch<SetStateAction<{ [key: string]: boolean }>>;
+    setEmptyErrors: Dispatch<SetStateAction<{ [key: string]: boolean }>>;
     onChange: (date: Date | null) => void;
 }
 
-export default function DatePicker({ inputId, inputLabel, inputName, isError, errorKey, isSubmittedSuccessfully, setErrors, onChange }: DatePickerProps) {
+export default function DatePicker({ inputId, inputLabel, inputName, isEmptyError, errorKey, isSubmittedSuccessfully, setEmptyErrors, onChange }: DatePickerProps) {
 
     const [selectedDate, setSelectedDate] = useState<Date | null>(null)
     const [viewDate, setViewDate] = useState(new Date());
     const [inputValue, setInputValue] = useState("");
     const [isOpen, setIsOpen] = useState(false);
-    const calendarRef = useRef<HTMLDivElement | null>(null);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    const calendarRef = useRef<HTMLDivElement | null>(null);
 
     const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July','August', 'September', 'October', 'November', 'December'];
 
@@ -90,7 +90,7 @@ export default function DatePicker({ inputId, inputLabel, inputName, isError, er
           setViewDate(parsedDate);
         }
 
-        handleStringInputChange(setInputValue, setErrors)(e);
+        handleStringInputChange(setInputValue, setEmptyErrors)(e);
     };
 
     const isValidDate = (year: number, month: number, day: number) => {
@@ -128,7 +128,7 @@ export default function DatePicker({ inputId, inputLabel, inputName, isError, er
     
             if (parsedDate > today) {
                 setInputValue("");
-                setErrorMessage("The date cannot be in the future.");
+                setErrorMessage("The date can't be in the future");
             } else {
                 setSelectedDate(parsedDate);
                 setInputValue(formatDate(parsedDate));
@@ -137,7 +137,7 @@ export default function DatePicker({ inputId, inputLabel, inputName, isError, er
             }
         } else {
             setInputValue("");
-            setErrorMessage("Invalid date. Please enter a valid date.");
+            setErrorMessage("The date you entered doesn't exist");
         }
     }
 
@@ -156,7 +156,8 @@ export default function DatePicker({ inputId, inputLabel, inputName, isError, er
 
     return (
         <div className="relative w-full flex flex-col items-center">
-            <Input id={inputId} label={inputLabel} type="text" name={inputName} value={inputValue} onChange={handleInputChange} onBlur={handleBlur} onFocus={() => setIsOpen(true)} isError={isError} placeholder="YYYY-MM-DD" />
+            <Input id={inputId} label={inputLabel} type="text" name={inputName} value={inputValue} onChange={handleInputChange} onBlur={handleBlur} onFocus={() => setIsOpen(true)} isEmptyError={isEmptyError} placeholder="YYYY-MM-DD" />
+            {errorMessage && <span className="text-red-500 mt-2">{errorMessage}</span>}
             {isOpen && (
                 <div ref={calendarRef} className="absolute z-50 bg-white shadow-lg rounded-lg p-4 mt-20 w-72" onBlur={handleCalendarBlur}>
                     <div className="flex items-center justify-between mb-4">
@@ -175,11 +176,10 @@ export default function DatePicker({ inputId, inputLabel, inputName, isError, er
                         {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day, index) => (
                           <div key={index} className="font-bold">{day}</div>
                         ))}
-                        <RenderCalendarDays viewDate={viewDate} selectedDate={selectedDate} errorKey={errorKey} setSelectedDate={setSelectedDate} setInputValue={setInputValue} setIsOpen={setIsOpen} setErrorMessage={setErrorMessage} setErrors={setErrors} onChange={onChange} />
+                        <RenderCalendarDays viewDate={viewDate} selectedDate={selectedDate} errorKey={errorKey} setSelectedDate={setSelectedDate} setInputValue={setInputValue} setIsOpen={setIsOpen} setErrorMessage={setErrorMessage} setEmptyErrors={setEmptyErrors} onChange={onChange} />
                     </div>
                 </div>
             )}
-            {errorMessage && <span className="text-red-500 mt-2 text-center">{errorMessage}</span>}
         </div>
     );
 }
