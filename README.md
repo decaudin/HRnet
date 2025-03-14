@@ -25,3 +25,5 @@ git clone https://github.com/decaudin/HRnet.git
 npm install  
 npm run dev
 ```
+
+The application is now available at http://localhost:5173/

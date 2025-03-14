@@ -46,6 +46,7 @@ export default function CreateEmployeeForm() {
     
         if (hasEmptyError) {
             setEmptyErrors(newEmptyErrors);
+            setTextErrors({});
             return;
         }
     

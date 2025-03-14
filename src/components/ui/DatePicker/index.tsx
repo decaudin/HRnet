@@ -107,6 +107,7 @@ export default function DatePicker({ inputId, inputLabel, inputName, isEmptyErro
         if (!inputValue.trim()) {
             setSelectedDate(null);
             onChange(null);
+            setErrorMessage(null);
             return;
         }
     
@@ -137,7 +138,7 @@ export default function DatePicker({ inputId, inputLabel, inputName, isEmptyErro
             }
         } else {
             setInputValue("");
-            setErrorMessage("The date you entered doesn't exist");
+            setErrorMessage("You entered an invalid date");
         }
     }
 
