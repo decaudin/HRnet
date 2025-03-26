@@ -39,17 +39,27 @@ export default function DatePicker({ inputId, inputLabel, inputName, isEmptyErro
                 setIsOpen(false);
             }
         };
+
+        const handleTabKey = (e: KeyboardEvent) => {
+            if (e.key === 'Tab' && e.shiftKey) {
+                if (calendarRef.current && !calendarRef.current.contains(e.target as Node)) {
+                    setIsOpen(false);
+                }
+            }
+        };
     
         if (isOpen) {
             document.addEventListener("mousedown", handleClickOutside);
             document.addEventListener("keydown", handleEscapeKey);
+            document.addEventListener("keydown", handleTabKey);
         }
     
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
             document.removeEventListener("keydown", handleEscapeKey);
+            document.removeEventListener("keydown", handleTabKey);
         }
-    }, [isOpen]);
+    }, [isOpen]);    
 
     const handleMonthChange = (e: MouseEvent<HTMLButtonElement>, direction: 'prev' | 'next') => {
         e.preventDefault();
@@ -59,7 +69,7 @@ export default function DatePicker({ inputId, inputLabel, inputName, isEmptyErro
         setViewDate(newDate);
     };
 
-    const handleTodayClick = (e: MouseEvent) => {
+    const handleTodayClick = (e: MouseEvent<HTMLButtonElement>) => {
         e.preventDefault()
         const today = new Date();
         setViewDate(today);
