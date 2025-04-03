@@ -1,8 +1,8 @@
 import { Dispatch, SetStateAction, FocusEvent } from "react";
 
-export const validateNoDigitsOrSpecialChars = (value: string): boolean => /^[a-zA-ZÀ-ÿ\s-]*$/.test(value);
+export const validateNoDigitsOrSpecialChars = (value: string): boolean => /^[a-zA-ZÀ-ÿ\s-']*$/.test(value);
 
-export const validateNoSpecialChars = (value: string): boolean => /^[a-zA-ZÀ-ÿ0-9\s-]*$/.test(value);
+export const validateNoSpecialChars = (value: string): boolean => /^[a-zA-ZÀ-ÿ0-9\s-']*$/.test(value);
 
 interface ValidateTextOnBlurParams {
     e: FocusEvent<HTMLInputElement>;

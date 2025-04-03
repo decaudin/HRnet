@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { EmployeeData, useEmployeeStore } from "../../../utils/store/employee.ts";
 import EmployeeTableHeader from "../EmpoyeeTableHeader";
 import EmployeeTableBody from "../EmployeeTableBody";
@@ -16,6 +16,10 @@ export default function EmployeeTable() {
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const [sortConfig, setSortConfig] = useState<SortConfig>({ key: 'firstName', direction: 'asc' });
+
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [searchTerm]);
 
     const handleLimitChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setLimit(Number(e.target.value));

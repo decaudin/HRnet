@@ -162,6 +162,7 @@ export default function DatePicker({ inputId, inputLabel, inputName, isEmptyErro
         if (isSubmittedSuccessfully) {
             setInputValue("");
             setSelectedDate(null);
+            setViewDate(new Date());
         }
     }, [isSubmittedSuccessfully]);
 

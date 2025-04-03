@@ -50,7 +50,7 @@ export default function RenderCalendarDays({ viewDate, selectedDate, errorKey, s
         setErrorMessage(null);
         setEmptyErrors((prevErrors) => ({...prevErrors, [errorKey]: false }));
         onChange(date);
-    };    
+    };
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>, date: Date) => {
         if (e.key === "Tab" && e.shiftKey) {
@@ -61,11 +61,12 @@ export default function RenderCalendarDays({ viewDate, selectedDate, errorKey, s
 
         const currentIndex = days.findIndex((d) => d.getTime() === date.getTime());
         let newIndex = currentIndex;
-        const today = new Date()        
+        const today = new Date();
+        const normalizedToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
 
         switch (e.key) {
             case "ArrowRight":
-                if (currentIndex + 1 < days.length && days[currentIndex + 1] <= today) {
+                if (currentIndex + 1 < days.length && days[currentIndex + 1] <= normalizedToday) {
                     newIndex = currentIndex + 1;
                 }
                 break;
@@ -73,8 +74,14 @@ export default function RenderCalendarDays({ viewDate, selectedDate, errorKey, s
                 newIndex = Math.max(currentIndex - 1, 0);
                 break;
             case "ArrowDown":
-                if (currentIndex + 7 < days.length && days[currentIndex + 7] <= today) {
+                if (currentIndex + 7 < days.length && days[currentIndex + 7] <= normalizedToday) {
                     newIndex = currentIndex + 7;
+                } else {
+                    if (normalizedToday <= days[days.length - 1]) {
+                        newIndex = days.findIndex(d => d.getTime() === normalizedToday.getTime());
+                    } else {
+                        newIndex = days.length - 1;
+                    }
                 }
                 break;
             case "ArrowUp":
@@ -96,8 +103,7 @@ export default function RenderCalendarDays({ viewDate, selectedDate, errorKey, s
         setTimeout(() => {
             dayRefs.current[newIndex]?.focus();
         }, 0);
-
-    };
+    };    
 
     const days = useMemo(() => {
         const firstDayOfMonth = startOfMonth(viewDate);
