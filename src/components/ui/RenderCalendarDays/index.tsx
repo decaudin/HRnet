@@ -4,7 +4,7 @@ import { formatDate } from "../../../utils/functions/formatDate";
 interface RenderCalendarDaysProps {
     viewDate: Date;
     selectedDate: Date | null;
-    errorKey: string;
+    inputKey: string;
     setSelectedDate: Dispatch<SetStateAction<Date | null>>;
     setInputValue: Dispatch<SetStateAction<string>>;
     setIsOpen: Dispatch<SetStateAction<boolean>>;
@@ -13,7 +13,7 @@ interface RenderCalendarDaysProps {
     onChange: (date: Date) => void;
 }
 
-export default function RenderCalendarDays({ viewDate, selectedDate, errorKey, setSelectedDate, setInputValue, setIsOpen, setErrorMessage, setEmptyErrors, onChange }: RenderCalendarDaysProps) {
+export default function RenderCalendarDays({ viewDate, selectedDate, inputKey, setSelectedDate, setInputValue, setIsOpen, setErrorMessage, setEmptyErrors, onChange }: RenderCalendarDaysProps) {
 
     const dayRefs = useRef<(HTMLDivElement | null)[]>([]);
 
@@ -48,7 +48,7 @@ export default function RenderCalendarDays({ viewDate, selectedDate, errorKey, s
         setInputValue(formatDate(date));
         setIsOpen(false);
         setErrorMessage(null);
-        setEmptyErrors((prevErrors) => ({...prevErrors, [errorKey]: false }));
+        setEmptyErrors((prevErrors) => ({...prevErrors, [inputKey]: false }));
         onChange(date);
     };
 
@@ -120,7 +120,10 @@ export default function RenderCalendarDays({ viewDate, selectedDate, errorKey, s
                 const isSelected = selectedDate && day.toDateString() === selectedDate.toDateString();
                 const isToday = new Date().toDateString() === day.toDateString();
                 const isFuture = day > new Date();
-                const dayClass = `${isCurrentMonth ? '' : 'text-gray-400'} ${isSelected ? 'bg-blue-500 text-white' : ''} ${isToday ? 'border-2 border-blue-500' : ''} ${isFuture ? 'cursor-not-allowed text-gray-300' : 'cursor-pointer hover:bg-orange-400 hover:text-white focus:bg-orange-400 focus:text-white'} py-2 rounded-lg`;
+                const isUnder18 = day > new Date(new Date().setFullYear(new Date().getFullYear() - 18));
+                const isDisabled = (isFuture || (inputKey === "birthDate" && isUnder18));
+
+                const dayClass = `${isCurrentMonth ? '' : 'text-gray-400'} ${isSelected ? 'bg-blue-500 text-white' : ''} ${isToday ? 'border-2 border-blue-500' : ''} ${isDisabled ? 'cursor-not-allowed text-gray-300' : 'cursor-pointer hover:bg-orange-400 hover:text-white focus:bg-orange-400 focus:text-white'} py-2 rounded-lg`;
     
                 return (
                     <div
@@ -129,10 +132,10 @@ export default function RenderCalendarDays({ viewDate, selectedDate, errorKey, s
                         role="button"
                         aria-label={`Date: ${formatDate(day)}`}
                         aria-selected={isSelected || false}
-                        aria-disabled={isFuture}
-                        tabIndex={isFuture ? -1 : 0}
-                        onClick={() => !isFuture && handleDateClick(day)}
-                        onKeyDown={(e) => !isFuture && handleKeyDown(e, day)}
+                        aria-disabled={isDisabled}
+                        tabIndex={isDisabled ? -1 : 0}
+                        onClick={() => !isDisabled && handleDateClick(day)}
+                        onKeyDown={(e) => !isDisabled && handleKeyDown(e, day)}
                         className={dayClass}
                     >
                         {day.getDate()}

@@ -31,8 +31,8 @@ export default function EmployeeBasicForm({formData, setFormData, emptyErrors, s
         <>
             <Input id="firstName" label="First Name" type="text" name="firstName" value={formData.firstName} onChange={handleObjectInputChange(setFormData, setEmptyErrors)} onBlur={(e) => handleBlur({ e, setTextErrors, setFormData, validate: validateNoDigitsOrSpecialChars })} isEmptyError={emptyErrors.firstName} isTextError={textErrors.firstName} />
             <Input id="lastName" label="Last Name" type="text" name="lastName" value={formData.lastName} onChange={handleObjectInputChange(setFormData, setEmptyErrors)} onBlur={(e) => handleBlur({ e, setTextErrors, setFormData, validate: validateNoDigitsOrSpecialChars})} isEmptyError={emptyErrors.lastName} isTextError={textErrors.lastName} />
-            <DatePicker onChange={(date) => setFormData({ ...formData, birthDate: formatDate(date) })} inputId="birthDate" inputLabel="Date of Birth" inputName="birthDate" errorKey="birthDate" isEmptyError={emptyErrors.birthDate} setEmptyErrors={setEmptyErrors} isSubmittedSuccessfully={isSubmittedSuccessfully} />
-            <DatePicker onChange={(date) => setFormData({ ...formData, startDate: formatDate(date) })} inputId="startDate" inputLabel="Start Date" inputName="startDate" errorKey="startDate" isEmptyError={emptyErrors.startDate} setEmptyErrors={setEmptyErrors} isSubmittedSuccessfully={isSubmittedSuccessfully} /> 
+            <DatePicker onChange={(date) => setFormData({ ...formData, birthDate: formatDate(date) })} inputKey="birthDate" inputLabel="Date of Birth" isEmptyError={emptyErrors.birthDate} setEmptyErrors={setEmptyErrors} isSubmittedSuccessfully={isSubmittedSuccessfully} />
+            <DatePicker onChange={(date) => setFormData({ ...formData, startDate: formatDate(date) })} inputKey="startDate" inputLabel="Start Date" isEmptyError={emptyErrors.startDate} setEmptyErrors={setEmptyErrors} isSubmittedSuccessfully={isSubmittedSuccessfully} /> 
         </>
     )
 }

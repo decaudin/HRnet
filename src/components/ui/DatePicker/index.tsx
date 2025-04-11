@@ -6,17 +6,15 @@ import RenderCalendarDays from '../RenderCalendarDays';
 import Select from "../Select";
 
 interface DatePickerProps {
-    inputId: string;
+    inputKey: string;
     inputLabel: string;
-    inputName: string;
     isEmptyError: boolean;
-    errorKey: string;
     isSubmittedSuccessfully: boolean;
     setEmptyErrors: Dispatch<SetStateAction<{ [key: string]: boolean }>>;
     onChange: (date: Date | null) => void;
 }
 
-export default function DatePicker({ inputId, inputLabel, inputName, isEmptyError, errorKey, isSubmittedSuccessfully, setEmptyErrors, onChange }: DatePickerProps) {
+export default function DatePicker({ inputKey, inputLabel, isEmptyError, isSubmittedSuccessfully, setEmptyErrors, onChange }: DatePickerProps) {
 
     const [selectedDate, setSelectedDate] = useState<Date | null>(null)
     const [viewDate, setViewDate] = useState(new Date());
@@ -136,21 +134,41 @@ export default function DatePicker({ inputId, inputLabel, inputName, isEmptyErro
         if (parsedDate && !isNaN(parsedDate.getTime())) {
             const today = new Date();
             today.setHours(0, 0, 0, 0);
-    
+
             if (parsedDate > today) {
                 setInputValue("");
                 setErrorMessage("The date can't be in the future");
-            } else {
-                setSelectedDate(parsedDate);
-                setInputValue(formatDate(parsedDate));
-                onChange(parsedDate);
-                setErrorMessage(null);
+                return;
             }
+                
+            if (inputKey === "birthDate") {
+                let age = today.getFullYear() - parsedDate.getFullYear();
+                if (age === 18) {
+                    const m = today.getMonth() - parsedDate.getMonth();
+                    if (m < 0 || (m === 0 && today.getDate() < parsedDate.getDate())) {
+                        age--;
+                    }
+                }
+
+                if (age < 18) {
+                    setInputValue("");
+                    setErrorMessage("Employees must be at least 18 years old.");
+                    return;
+                }
+            }
+    
+            setSelectedDate(parsedDate);
+            setInputValue(formatDate(parsedDate));
+            setViewDate(parsedDate);
+            onChange(parsedDate);
+            setErrorMessage(null);
+
         } else {
             setInputValue("");
             setErrorMessage("You entered an invalid date");
         }
-    }
+    };
+    
 
     const handleCalendarBlur = (e: React.FocusEvent) => {
         if (calendarRef.current && !calendarRef.current.contains(e.relatedTarget)) {
@@ -168,7 +186,7 @@ export default function DatePicker({ inputId, inputLabel, inputName, isEmptyErro
 
     return (
         <div className="relative w-full flex flex-col items-center">
-            <Input id={inputId} label={inputLabel} type="text" name={inputName} value={inputValue} onChange={handleInputChange} onBlur={handleBlur} onFocus={() => setIsOpen(true)} isEmptyError={isEmptyError} placeholder="YYYY-MM-DD" />
+            <Input id={inputKey} label={inputLabel} type="text" name={inputKey} value={inputValue} onChange={handleInputChange} onBlur={handleBlur} onFocus={() => setIsOpen(true)} isEmptyError={isEmptyError} placeholder="YYYY-MM-DD" />
             {errorMessage && <span className="text-red-500 mt-2">{errorMessage}</span>}
             {isOpen && (
                 <div ref={calendarRef} className="absolute z-50 bg-white shadow-lg rounded-lg p-4 mt-20 w-72" onBlur={handleCalendarBlur}>
@@ -188,7 +206,7 @@ export default function DatePicker({ inputId, inputLabel, inputName, isEmptyErro
                         {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day, index) => (
                           <div key={index} className="font-bold">{day}</div>
                         ))}
-                        <RenderCalendarDays viewDate={viewDate} selectedDate={selectedDate} errorKey={errorKey} setSelectedDate={setSelectedDate} setInputValue={setInputValue} setIsOpen={setIsOpen} setErrorMessage={setErrorMessage} setEmptyErrors={setEmptyErrors} onChange={onChange} />
+                        <RenderCalendarDays viewDate={viewDate} selectedDate={selectedDate} inputKey={inputKey} setSelectedDate={setSelectedDate} setInputValue={setInputValue} setIsOpen={setIsOpen} setErrorMessage={setErrorMessage} setEmptyErrors={setEmptyErrors} onChange={onChange} />
                     </div>
                 </div>
             )}
