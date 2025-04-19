@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction, useState, useEffect, useRef, MouseEvent } from "react";
+import { EmployeeData } from "../../../utils/store/employee";
 import { formatDate } from '../../../utils/functions/formatDate';
 import { handleStringInputChange } from '../../../utils/functions/handleStringInputChange';
 import Input from '../Input';
@@ -6,7 +7,7 @@ import RenderCalendarDays from '../RenderCalendarDays';
 import Select from "../Select";
 
 interface DatePickerProps {
-    inputKey: string;
+    inputKey: keyof EmployeeData;
     inputLabel: string;
     isEmptyError: boolean;
     isSubmittedSuccessfully: boolean;
@@ -103,12 +104,14 @@ export default function DatePicker({ inputKey, inputLabel, isEmptyError, isSubmi
 
     const isValidDate = (year: number, month: number, day: number) => {
         const testDate = new Date(year, month - 1, day);
-        return (
-            testDate.getFullYear() === year &&
-            testDate.getMonth() === month - 1 &&
-            testDate.getDate() === day
-        );
+        return testDate.getFullYear() === year && testDate.getMonth() === month - 1 && testDate.getDate() === day;
     };
+
+    const invalidate = (message: string) => {
+        setInputValue("");
+        onChange(null);
+        setErrorMessage(message);
+    };  
 
     const handleBlur = () => {
 
@@ -136,8 +139,7 @@ export default function DatePicker({ inputKey, inputLabel, isEmptyError, isSubmi
             today.setHours(0, 0, 0, 0);
 
             if (parsedDate > today) {
-                setInputValue("");
-                setErrorMessage("The date can't be in the future");
+                invalidate("The date can't be in the future");
                 return;
             }
                 
@@ -151,8 +153,7 @@ export default function DatePicker({ inputKey, inputLabel, isEmptyError, isSubmi
                 }
 
                 if (age < 18) {
-                    setInputValue("");
-                    setErrorMessage("Employees must be at least 18 years old.");
+                    invalidate("Employees must be at least 18 years old");
                     return;
                 }
             }
@@ -164,17 +165,21 @@ export default function DatePicker({ inputKey, inputLabel, isEmptyError, isSubmi
             setErrorMessage(null);
 
         } else {
-            setInputValue("");
-            setErrorMessage("You entered an invalid date");
+            invalidate("You entered an invalid date");
         }
     };
-    
 
     const handleCalendarBlur = (e: React.FocusEvent) => {
         if (calendarRef.current && !calendarRef.current.contains(e.relatedTarget)) {
             setIsOpen(false);
         }
     };
+
+    useEffect(() => {
+        if (isEmptyError) {
+            setErrorMessage(null)
+        }
+    },[isEmptyError]);
 
     useEffect(() => {
         if (isSubmittedSuccessfully) {
@@ -186,8 +191,7 @@ export default function DatePicker({ inputKey, inputLabel, isEmptyError, isSubmi
 
     return (
         <div className="relative w-full flex flex-col items-center">
-            <Input id={inputKey} label={inputLabel} type="text" name={inputKey} value={inputValue} onChange={handleInputChange} onBlur={handleBlur} onFocus={() => setIsOpen(true)} isEmptyError={isEmptyError} placeholder="YYYY-MM-DD" />
-            {errorMessage && <span className="text-red-500 mt-2">{errorMessage}</span>}
+            <Input id={inputKey} label={inputLabel} type="text" name={inputKey} value={inputValue} onChange={handleInputChange} onBlur={handleBlur} onFocus={() => setIsOpen(true)} isEmptyError={isEmptyError} errorMessage={errorMessage} placeholder="YYYY-MM-DD" />
             {isOpen && (
                 <div ref={calendarRef} className="absolute z-50 bg-white shadow-lg rounded-lg p-4 mt-20 w-72" onBlur={handleCalendarBlur}>
                     <div className="flex items-center justify-between mb-4">
