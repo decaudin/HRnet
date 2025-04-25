@@ -11,9 +11,9 @@ interface SelectProps {
     return (
         <select id={id} value={value} onChange={onChange} className={`border cursor-pointer ${className}`}>
             {options.map((option, index) => (
-            <option key={index} value={option}>
-                {option}
-            </option>
+                <option key={index} value={option}>
+                    {option}
+                </option>
             ))}
         </select>
     );

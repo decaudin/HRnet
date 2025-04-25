@@ -13,9 +13,10 @@ interface DatePickerProps {
     isSubmittedSuccessfully: boolean;
     setEmptyErrors: Dispatch<SetStateAction<{ [key: string]: boolean }>>;
     onChange: (date: Date | null) => void;
+    isStartDateUnder18Error?: boolean;
 }
 
-export default function DatePicker({ inputKey, inputLabel, isEmptyError, isSubmittedSuccessfully, setEmptyErrors, onChange }: DatePickerProps) {
+export default function DatePicker({ inputKey, inputLabel, isEmptyError, isSubmittedSuccessfully, setEmptyErrors, onChange, isStartDateUnder18Error }: DatePickerProps) {
 
     const [selectedDate, setSelectedDate] = useState<Date | null>(null)
     const [viewDate, setViewDate] = useState(new Date());
@@ -180,6 +181,15 @@ export default function DatePicker({ inputKey, inputLabel, isEmptyError, isSubmi
             setErrorMessage(null)
         }
     },[isEmptyError]);
+
+    useEffect(() => {
+        if (isStartDateUnder18Error) {
+            setInputValue("");
+            setSelectedDate(null);
+            setViewDate(new Date());
+            setErrorMessage("Employees must have been at least 18 when they started");
+        }
+    },[isStartDateUnder18Error]);
 
     useEffect(() => {
         if (isSubmittedSuccessfully) {

@@ -15,10 +15,7 @@ export default function EmployeeTableBody({ displayedEmployees, searchTerm, sort
     const [hoveredRow, setHoveredRow] = useState<number | null>(null);
 
     const handleSort = (key: keyof EmployeeData) => {
-        let direction: "asc" | "desc" = "asc";
-        if (sortConfig.key === key && sortConfig.direction === "asc") {
-            direction = "desc";
-        }
+        const direction = sortConfig.key === key && sortConfig.direction === "asc" ? "desc" : "asc";
         setSortConfig({ key, direction });
     };
 

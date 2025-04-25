@@ -16,6 +16,7 @@ export default function CreateEmployeeForm() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [textErrors, setTextErrors] = useState<{ [key: string]: boolean }>({});
     const [emptyErrors, setEmptyErrors] = useState<{ [key: string]: boolean }>({});
+    const [isStartDateUnder18Error, setIsStartDateUnder18Error] = useState(false);
     const [isSubmittedSuccessfully, setIsSubmittedSuccessfully] = useState(false);
 
     const addEmployee = useEmployeeStore((state) => state.addEmployee);
@@ -23,6 +24,15 @@ export default function CreateEmployeeForm() {
 
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
+    
+    const hasStartedBefore18 = (birthDate: Date | null, startDate: Date | null): boolean => {
+        if (!birthDate || !startDate) return false;
+    
+        const eighteenthBirthday = new Date(birthDate.getFullYear() + 18, birthDate.getMonth(), birthDate.getDate());
+        const normalizedStartDate = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());
+    
+        return normalizedStartDate < eighteenthBirthday;
+    };
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
         e.preventDefault();
@@ -34,21 +44,29 @@ export default function CreateEmployeeForm() {
             if (!basicInfo[key].trim()) {
                 newEmptyErrors[key] = true;
                 hasEmptyError = true;
-            }
+            };
         });
     
         (Object.keys(addressInfo) as Array<keyof typeof addressInfo>).forEach((key) => {
             if (!addressInfo[key].trim()) {
                 newEmptyErrors[key] = true;
                 hasEmptyError = true;
-            }
-        });
-    
-        if (hasEmptyError) {
+            };
+        });   
+
+        const isUnder18 = hasStartedBefore18(new Date(formData.birthDate), new Date(formData.startDate));
+        setIsStartDateUnder18Error(isUnder18);
+
+        if (isUnder18) {
+            setBasicInfo((prev) => ({ ...prev, startDate: '' }));
+            setTimeout(() => setIsStartDateUnder18Error(false), 100);
+        };
+
+        if (hasEmptyError || isUnder18) {
             setEmptyErrors(newEmptyErrors);
             setTextErrors({});
             return;
-        }
+        };
     
         setIsSubmittedSuccessfully(true);
         addEmployee(formData);
@@ -58,14 +76,12 @@ export default function CreateEmployeeForm() {
         setAddressInfo({ street: '', city: '', state: states[0]?.abbreviation || '', zipCode: '' });
         setDepartmentInfo(departments[0]?.value || '');
 
-        setTimeout(() => {
-            setIsSubmittedSuccessfully(false);
-        }, 100);
+        setTimeout(() => setIsSubmittedSuccessfully(false), 100);
     };
 
     return (
         <form onSubmit={handleSubmit} className="flex flex-col items-center mx-auto pt-4 pb-8 bg-sky-100 shadow-[0px_-2px_4px_0px_rgba(0,0,0,0.15),0px_2px_4px_0px_rgba(0,0,0,0.15)] sm:shadow-lg sm:rounded-lg sm:w-3/5 lg:w-2/5">
-            <EmployeeBasicForm formData={basicInfo} setFormData={setBasicInfo} emptyErrors={emptyErrors} setEmptyErrors={setEmptyErrors} textErrors={textErrors} setTextErrors={setTextErrors} isSubmittedSuccessfully={isSubmittedSuccessfully} />
+            <EmployeeBasicForm formData={basicInfo} setFormData={setBasicInfo} emptyErrors={emptyErrors} setEmptyErrors={setEmptyErrors} textErrors={textErrors} setTextErrors={setTextErrors} isStartDateUnder18Error={isStartDateUnder18Error} isSubmittedSuccessfully={isSubmittedSuccessfully} />
             <EmployeeAdressForm states={states} formData={addressInfo} setFormData={setAddressInfo} emptyErrors={emptyErrors} setEmptyErrors={setEmptyErrors} textErrors={textErrors} setTextErrors={setTextErrors} />
             <EmployeeDepartmentDropdown departments={departments} departmentInfo={departmentInfo} setDepartmentInfo={setDepartmentInfo} />
             <SubmitInput value="Save" />
