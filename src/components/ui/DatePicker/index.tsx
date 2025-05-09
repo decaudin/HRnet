@@ -140,7 +140,7 @@ export default function DatePicker({ inputKey, inputLabel, isEmptyError, isSubmi
             today.setHours(0, 0, 0, 0);
 
             if (parsedDate > today) {
-                invalidate("The date can't be in the future");
+                invalidate(`${inputLabel} can't be in the future`);
                 return;
             }
                 
@@ -166,7 +166,7 @@ export default function DatePicker({ inputKey, inputLabel, isEmptyError, isSubmi
             setErrorMessage(null);
 
         } else {
-            invalidate("You entered an invalid date");
+            invalidate(`${inputLabel} is an invalid date`);
         }
     };
 

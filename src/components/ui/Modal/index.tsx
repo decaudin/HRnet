@@ -12,14 +12,14 @@ export default function Modal({ isOpen, onClose, children }: ModalProps) {
 
     useEffect(() => {
         if (isOpen) {
-        closeButtonRef.current?.focus();
+            closeButtonRef.current?.focus();
 
-        const handleKeyDown = (e: KeyboardEvent) => {
-            if (e.key === "Escape") onClose();
-        };
+            const handleKeyDown = (e: KeyboardEvent) => {
+                if (e.key === "Escape") onClose();
+            };
 
-        document.addEventListener("keydown", handleKeyDown);
-        return () => document.removeEventListener("keydown", handleKeyDown);
+            document.addEventListener("keydown", handleKeyDown);
+            return () => document.removeEventListener("keydown", handleKeyDown);
         }
     }, [isOpen, onClose]);
 

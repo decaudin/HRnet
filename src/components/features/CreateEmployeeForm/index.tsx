@@ -5,7 +5,7 @@ import { useEmployeeStore } from "../../../utils/store/employee.ts";
 import EmployeeBasicForm from "../EmployeeBasicForm";
 import EmployeeAdressForm from "../EmployeeAdressForm";
 import EmployeeDepartmentDropdown from "../EmployeeDepartmentDropdown";
-import SubmitInput from "../../ui/SubmitInput";
+import SubmitButton from "../../ui/SubmitButton";
 import Modal from "../../ui/Modal";
 
 export default function CreateEmployeeForm() {
@@ -84,7 +84,7 @@ export default function CreateEmployeeForm() {
             <EmployeeBasicForm formData={basicInfo} setFormData={setBasicInfo} emptyErrors={emptyErrors} setEmptyErrors={setEmptyErrors} textErrors={textErrors} setTextErrors={setTextErrors} isStartDateUnder18Error={isStartDateUnder18Error} isSubmittedSuccessfully={isSubmittedSuccessfully} />
             <EmployeeAdressForm states={states} formData={addressInfo} setFormData={setAddressInfo} emptyErrors={emptyErrors} setEmptyErrors={setEmptyErrors} textErrors={textErrors} setTextErrors={setTextErrors} />
             <EmployeeDepartmentDropdown departments={departments} departmentInfo={departmentInfo} setDepartmentInfo={setDepartmentInfo} />
-            <SubmitInput value="Save" />
+            <SubmitButton>Save</SubmitButton>
             <Modal isOpen={isModalOpen} onClose={closeModal}>
                 <svg className="w-12 h-12 text-green-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" aria-label="Success check mark">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7"></path>
